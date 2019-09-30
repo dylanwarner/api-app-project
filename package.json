@@ -1,0 +1,26 @@
+{
+  "name": "api-app-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./src/server.js",
+  "scripts": {
+    "start": "node ./src/server.js",
+    "pretest": "eslint ./src --fix",
+    "test": "echo \"Tests complete\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dylanwarner/api-app-project.git"
+  },
+  "author": "Dylan Warner",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/dylanwarner/api-app-project/issues"
+  },
+  "homepage": "https://github.com/dylanwarner/api-app-project#readme",
+  "devDependencies": {
+    "eslint": "^6.5.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-plugin-import": "^2.18.2"
+  }
+}
