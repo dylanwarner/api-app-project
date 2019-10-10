@@ -29,8 +29,13 @@ const getNotes = (request, response) => {
 const getNotesMeta = (request, response) => respondJSONMeta(request, response, 200);
 
 const addNote = (request, response, body) => {
+  
   const responseJSON = {
-    message: 'Note is required',
+    message: 'Note is required.',
+  };
+
+  const note = {
+    note: '',
   };
 
   if (!body.note) {
@@ -49,8 +54,8 @@ const addNote = (request, response, body) => {
   notes[body.note].note = body.note;
 
   if (responseCode === 201) {
-    responseJSON.message = 'Created Successfully';
-    respondJSON(request, response, responseCode, responseJSON);
+    responseJSON.message = 'Note Added';
+    return respondJSON(request, response, responseCode, responseJSON);
   }
 
   return respondJSONMeta(request, response, responseCode);

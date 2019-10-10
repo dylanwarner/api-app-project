@@ -3,9 +3,132 @@
 <head>
     <title>Notes</title>
     <link rel="stylesheet" type="text/css" href="/style.css">
-    <link href="https://fonts.googleapis.com/css?family=Patrick+Hand&display=swap" rel="stylesheet">
-    <script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Permanent+Marker&display=swap" rel="stylesheet">
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+    <script type="text/babel">
+        const parseJSON = (xhr, content) => {
+            if(xhr.response) {
+                const obj = JSON.parse(xhr.response);
+                console.log(obj);
+                if(xhr.status === 200) {
+                    
+                    //console.log(obj.notes);
+                    //console.log(obj.notes);
+                    //content.innerHTML += `<p>${obj.note}</p>`;
+                }
+            }
+        };
+        const handleResponse = (xhr, parseResponse) => {
+            
+            const notepad = document.querySelector('#notepad');
+            const alert = document.querySelector('#alert');
+            const msg = document.querySelector('#msg');
+
+            const obj = JSON.parse(xhr.response);
+            //console.log(obj);
+            
+            switch(xhr.status) {
+                case 200:
+                    break;
+                case 201: // created
+                    msg.innerHTML = `${obj.message}`;
+                    alert.style.display = "inline-block";
+                    alert.style.backgroundColor = "#4CAF50";
+                    break;
+                case 204: // updated
+                    msg.msg.innerHTML = `${obj.message}`;
+                    alert.style.display = "inline-block";
+                    alert.style.backgroundColor = "#4CAF50";
+                    break;
+                case 400: // bad request
+                    msg.innerHTML = `${obj.message}`;
+                    alert.style.display = "inline-block";
+                    alert.style.backgroundColor = "#f44336";
+                    break;
+                case 404: // not found
+                    notepad.innerHTML = '<b>Resource Not Found</b>';
+                    break;
+                default: // any other status
+                    msg.innerHTML = `${obj.message}`;
+                    alert.style.display = "inline-block";
+                    alert.style.backgroundColor = "#2196F3";
+                    break;
+                }
+
+            parseJSON(xhr, notepad);
+            //const x = document.querySelector('.closebtn');
+            //alert.style.display = "inline-block";
+
+            //const popup = document.querySelector('#popup');
+
+            //const p = document.createElement('p');
+
+            
+
+            //content.appendChild(p);
+
+            //parseJSON(xhr, content);
+        };
+        const sendPost = (e, noteForm) => {
+            
+            const noteAction = noteForm.getAttribute('action');
+            const noteMethod = noteForm.getAttribute('method');
+
+            const noteField = noteForm.querySelector('#noteField');
+
+            const xhr = new XMLHttpRequest();
+            xhr.open(noteMethod, noteAction);
+
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.setRequestHeader('Accept', 'application/json');
+
+            xhr.onload = () => handleResponse(xhr);
+
+            const formData = `note=${noteField.value}`;
+
+            xhr.send(formData);
+
+            e.preventDefault();
+            return false;
+        };
+
+        const requestUpdate = (e, getNotes) => {
+
+            const getNotesAction = getNotes.getAttribute('action');
+            const getNotesMethod = getNotes.getAttribute('method');
+
+            const xhr = new XMLHttpRequest();
+
+            xhr.open(getNotesMethod, getNotesAction);
+
+            xhr.setRequestHeader('Accept', 'application/json');
+
+            xhr.onload = () => handleResponse(xhr, true);
+
+            xhr.send();
+
+            e.preventDefault();
+            
+            return false;
+        };
+
+        const init = () => {
+            
+            const noteForm = document.querySelector('#noteForm');
+            const getForm = document.querySelector('#get_notes_form');
+
+            const getNotes = (e) => requestUpdate(e, getForm);
+            const addNote = (e) => sendPost(e, noteForm);
+            
+            noteForm.addEventListener('submit', addNote);
+            getForm.addEventListener('click', getNotes);
+        };
+
+        window.onload = init;
     </script>
 </head>
 <body>
@@ -16,9 +139,20 @@
             <input id="noteField" type="text" name="note" autofocus placeholder="Start typing..."/>
             <input type="submit" value="+" />
         </form>
+        <div id="alert">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+            <span id="msg"></span>
+        </div>
     </div>
     <div id="content">
-        
+        <div id="header">
+            <form id="get_notes_form" action="/getNotes" method="get">
+            <button id="get_notes">Get Notes</button>
+            </form>
+        </div>
+        <div id="notepad">
+
+        </div>
     </div>
 </body>
 </html>

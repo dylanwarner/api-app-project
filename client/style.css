@@ -12,31 +12,125 @@ html, body {
 }
 
 h1 {
-    font-family: 'Patrick Hand', cursive;
+    font-family: 'Permanent Marker', cursive;
     text-align: center;
-    text-decoration: underline;
+}
+
+p {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 18px;
 }
 
 label {
-    font-family: 'Patrick Hand', cursive;
+    font-family: 'Roboto', sans-serif;
+    font-size: 13px;
     text-align: center;
     padding-right: 5px;
 }
 
-input {
+form {
+    padding-top: 15px;
+    padding-bottom: 20px;
+}
 
+input {
+}
+
+input[type=submit] {
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+    font-size: 14px;
+    background-color: #4EB4BF;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+    color: white;
+    border-style: none;
+    cursor: pointer;
+}
+
+input[type=submit]:hover {
+    background-color: rgb(78, 180, 191,0.9);
 }
 
 #noteField {
     width: 200px;
+    height: 20px;
+    border: 1px solid #F4F4F2;
+    border-radius: 8px;
+    border-color: #F4F4F2;
+    padding: 2px;
 }
 
 #content {
     margin: 0 auto;
-    margin-top: 50px;
+    margin-top: 10px;
+    padding: 10px;
     font-size: 2em;
     text-align: center;
-    width: 500px;
+    width: 550px;
     height: 500px;
-    border: 1px solid black;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+    background-color: #F4F4F2;
+    overflow-y:auto;
 }
+
+#msg {
+    font-size: 12px;
+    margin: 0;
+    text-align: center;
+}
+
+#header {
+    width: 100%;
+    height: 50px;
+}
+
+#get_notes {
+    float: right;
+    width: 70px;
+    height: 40px;
+    background-color: #4EB4BF;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+    color: white;
+    border-style: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 5px;
+}
+
+#get_notes:hover {
+    background-color: rgb(78, 180, 191,0.9);
+}
+
+#notepad {
+    padding-top: 10px;
+}
+
+#alert {
+    font-family: 'Roboto', sans-serif;
+    border-radius: 8px;
+    display: inline-block;
+    text-align: center;
+    padding: 2px;
+    background-color: #4CAF50;
+    color: white;
+    margin-bottom: 15px;
+    width: 200px;
+    height: 25px;
+    display: none;
+}
+
+.closebtn {
+    color: white;
+    font-weight: bold;
+    float: right;
+    margin-right: 3px;
+    font-size: 20px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .closebtn:hover {
+    color: black;
+  }
