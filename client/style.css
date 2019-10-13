@@ -3,12 +3,16 @@ html, body {
     width: 100%;
     margin: 0;
     padding: 0;
+    background-color: #EAF2F5;
 }
 
 #head {
-    padding-top: 50px;
     text-align: center;
     margin: 0 auto;
+}
+
+#title {
+    padding-top: 40px;
 }
 
 h1 {
@@ -16,9 +20,17 @@ h1 {
     text-align: center;
 }
 
+h3 {
+    font-family: 'Roboto Slab', serif;
+    font-size: 20px;
+    padding-left: 40px;
+    padding-top: 10px;
+}
+
 p {
     font-family: 'Open Sans', sans-serif;
-    font-size: 18px;
+    opacity: 0.6;
+    font-size: 13px;
 }
 
 label {
@@ -61,13 +73,22 @@ input[type=submit]:hover {
     padding: 2px;
 }
 
+#titleField {
+    width: 200px;
+    height: 20px;
+    border: 1px solid #F4F4F2;
+    border-radius: 8px;
+    border-color: #F4F4F2;
+    padding: 2px;
+}
+
 #content {
     margin: 0 auto;
     margin-top: 10px;
     padding: 10px;
     font-size: 2em;
     text-align: center;
-    width: 550px;
+    width: 600px;
     height: 500px;
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
     background-color: #F4F4F2;
@@ -111,12 +132,12 @@ input[type=submit]:hover {
     border-radius: 8px;
     display: inline-block;
     text-align: center;
-    padding: 2px;
     background-color: #4CAF50;
     color: white;
     margin-bottom: 15px;
-    width: 200px;
+    width: 250px;
     height: 25px;
+    padding: 4px;
     display: none;
 }
 
@@ -129,8 +150,32 @@ input[type=submit]:hover {
     line-height: 20px;
     cursor: pointer;
     transition: 0.3s;
-  }
+    padding-top: 2px;
+}
   
-  .closebtn:hover {
+.closebtn:hover {
     color: black;
-  }
+}
+
+.note {
+    background-color: white;
+    height: 150px;
+    text-align: start;
+    margin: 5px;
+    overflow-y:auto;
+    padding-top: 5px;
+    margin-bottom: 15px;
+    margin-top: 10px;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+    border-left: 20px solid orange;
+}
+
+li {
+    font-size: 12px;
+}
+
+ul {
+    padding-left: 55px;
+    padding-right: 55px;
+    margin-top: 10px;
+}

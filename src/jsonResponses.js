@@ -29,32 +29,30 @@ const getNotes = (request, response) => {
 const getNotesMeta = (request, response) => respondJSONMeta(request, response, 200);
 
 const addNote = (request, response, body) => {
-  
   const responseJSON = {
-    message: 'Note is required.',
+    message: 'Title and note are both required.',
   };
 
-  const note = {
-    note: '',
-  };
-
-  if (!body.note) {
+  if (!body.note || !body.title || !body.color) {
     responseJSON.id = 'missingParams';
     return respondJSON(request, response, 400, responseJSON);
   }
 
   let responseCode = 201;
 
-  if (notes[body.note]) {
+  if (notes[body.title]) {
     responseCode = 204;
   } else {
-    notes[body.note] = {};
+    notes[body.title] = {};
   }
 
-  notes[body.note].note = body.note;
+  notes[body.title].title = body.title;
+  notes[body.title].note = body.note;
+  notes[body.title].color = body.color;
+
 
   if (responseCode === 201) {
-    responseJSON.message = 'Note Added';
+    responseJSON.message = 'Note added.';
     return respondJSON(request, response, responseCode, responseJSON);
   }
 

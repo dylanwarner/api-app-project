@@ -3,22 +3,61 @@
 <head>
     <title>Notes</title>
     <link rel="stylesheet" type="text/css" href="/style.css">
+    <!-- Embed google fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Permanent+Marker&display=swap" rel="stylesheet">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
     <script type="text/babel">
+        // function to parse JSON response 
         const parseJSON = (xhr, content) => {
             if(xhr.response) {
                 const obj = JSON.parse(xhr.response);
-                console.log(obj);
+                //console.log(obj);
                 if(xhr.status === 200) {
-                    
                     //console.log(obj.notes);
+                    Object.values(obj).forEach(function(data) {
+                        Object.values(data).forEach(function (d) {
+                            console.log(d);
+                            
+                            const notepad = document.querySelector('#notepad');
+                            const p = document.createElement('p');
+                            const h3 = document.createElement('h3');
+                            const ul = document.createElement('ul');
+                            const li = document.createElement('li');
+                            const div = document.createElement('div');
+
+                            div.className = 'note';
+                            if(d.color === 'Orange') {
+                                div.style.borderColor = "#DB8C53";
+                            }
+                            if(d.color === 'Purple') {
+                                div.style.borderColor = "#AA89D9";
+                            }
+                            if(d.color === 'Red') {
+                                div.style.borderColor = "#DB6561";
+                            }
+                            if(d.color === 'Green') {
+                                div.style.borderColor = "#84C289";
+                            }
+                            if(d.color === 'Pink') {
+                                div.style.borderColor = "#F280BF";
+                            }
+                            if(d.color === 'Blue') {
+                                div.style.borderColor = "#61A2C2";
+                            }
+                            p.textContent = d.note;
+                            h3.textContent = d.title;
+                            notepad.appendChild(div);
+                            div.appendChild(h3);
+                            li.appendChild(p);
+                            ul.appendChild(li);
+                            div.appendChild(ul);
+                        });
+                    });
                     //console.log(obj.notes);
-                    //content.innerHTML += `<p>${obj.note}</p>`;
+                    //content.innerHTML += `<p>${xhr.response}</p>`;
                 }
             }
         };
@@ -27,25 +66,22 @@
             const notepad = document.querySelector('#notepad');
             const alert = document.querySelector('#alert');
             const msg = document.querySelector('#msg');
-
-            const obj = JSON.parse(xhr.response);
-            //console.log(obj);
             
             switch(xhr.status) {
                 case 200:
                     break;
                 case 201: // created
-                    msg.innerHTML = `${obj.message}`;
+                    msg.innerHTML = `Note Added.`;
                     alert.style.display = "inline-block";
                     alert.style.backgroundColor = "#4CAF50";
                     break;
                 case 204: // updated
-                    msg.msg.innerHTML = `${obj.message}`;
+                    msg.innerHTML = `Note Updated.`;
                     alert.style.display = "inline-block";
                     alert.style.backgroundColor = "#4CAF50";
                     break;
                 case 400: // bad request
-                    msg.innerHTML = `${obj.message}`;
+                    msg.innerHTML = `Title and note are both required.`;
                     alert.style.display = "inline-block";
                     alert.style.backgroundColor = "#f44336";
                     break;
@@ -60,18 +96,6 @@
                 }
 
             parseJSON(xhr, notepad);
-            //const x = document.querySelector('.closebtn');
-            //alert.style.display = "inline-block";
-
-            //const popup = document.querySelector('#popup');
-
-            //const p = document.createElement('p');
-
-            
-
-            //content.appendChild(p);
-
-            //parseJSON(xhr, content);
         };
         const sendPost = (e, noteForm) => {
             
@@ -79,6 +103,8 @@
             const noteMethod = noteForm.getAttribute('method');
 
             const noteField = noteForm.querySelector('#noteField');
+            const titleField = noteForm.querySelector('#titleField');
+            const colorSelect = noteForm.querySelector('#color');
 
             const xhr = new XMLHttpRequest();
             xhr.open(noteMethod, noteAction);
@@ -88,7 +114,7 @@
 
             xhr.onload = () => handleResponse(xhr);
 
-            const formData = `note=${noteField.value}`;
+            const formData = `title=${titleField.value}&note=${noteField.value}&color=${colorSelect.value}`;
 
             xhr.send(formData);
 
@@ -107,7 +133,11 @@
 
             xhr.setRequestHeader('Accept', 'application/json');
 
+            if(getNotesMethod == 'get'){
             xhr.onload = () => handleResponse(xhr, true);
+            } else {
+                xhr.onload = () => handleResponse(xhr, false);
+            }
 
             xhr.send();
 
@@ -132,11 +162,24 @@
     </script>
 </head>
 <body>
+    <div id="title">
+    <h1>Notes</h1>
+    </div>
     <div id="head">
-        <h1>Notes</h1>
         <form id="noteForm" action="/addNote" method="post">
+            <label for="title">Title: </label>
+            <input id="titleField" type="text" name="title" autofocus placeholder="Start typing..."/>
             <label for="note">Add a note: </label>
             <input id="noteField" type="text" name="note" autofocus placeholder="Start typing..."/>
+            <label for="color">Color: </label>
+            <select id="color" name="color">
+                <option>Orange</option>
+                <option>Purple</option>
+                <option>Blue</option>
+                <option>Red</option>
+                <option>Green</option>
+                <option>Pink</option>
+            </select>
             <input type="submit" value="+" />
         </form>
         <div id="alert">
