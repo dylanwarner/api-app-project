@@ -7,28 +7,34 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Permanent+Marker&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Gochi+Hand&display=swap" rel="stylesheet">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
     <script type="text/babel">
         // function to parse JSON response 
         const parseJSON = (xhr, content) => {
+            // if there is a response
             if(xhr.response) {
+                // parse the xhr response to a json object
                 const obj = JSON.parse(xhr.response);
-                //console.log(obj);
+                // if xhr status success
                 if(xhr.status === 200) {
-                    //console.log(obj.notes);
+                    // loop through the values in the object 
                     Object.values(obj).forEach(function(data) {
                         Object.values(data).forEach(function (d) {
-                            console.log(d);
                             
+                            // grab the notepad content area
                             const notepad = document.querySelector('#notepad');
+                            // create elements to build each note
                             const p = document.createElement('p');
                             const h3 = document.createElement('h3');
                             const ul = document.createElement('ul');
                             const li = document.createElement('li');
                             const div = document.createElement('div');
 
+                            // set the class of the div for styling
                             div.className = 'note';
+                            // if statements to decide the color of the note based on the selected option
                             if(d.color === 'Orange') {
                                 div.style.borderColor = "#DB8C53";
                             }
@@ -47,8 +53,11 @@
                             if(d.color === 'Blue') {
                                 div.style.borderColor = "#61A2C2";
                             }
+                            // set the content of the p to the note 
                             p.textContent = d.note;
+                            // set the content of the h3 to the title
                             h3.textContent = d.title;
+                            // append each of the elements to form the note
                             notepad.appendChild(div);
                             div.appendChild(h3);
                             li.appendChild(p);
@@ -56,17 +65,21 @@
                             div.appendChild(ul);
                         });
                     });
-                    //console.log(obj.notes);
-                    //content.innerHTML += `<p>${xhr.response}</p>`;
                 }
             }
         };
+
+        // function to handle xhr response 
         const handleResponse = (xhr, parseResponse) => {
             
+            // grab the notepad section
             const notepad = document.querySelector('#notepad');
+            // grab the alert
             const alert = document.querySelector('#alert');
+            // grab the msg
             const msg = document.querySelector('#msg');
             
+            // check xhr status code and print alert msgs depending on codes
             switch(xhr.status) {
                 case 200:
                     break;
@@ -86,59 +99,77 @@
                     alert.style.backgroundColor = "#f44336";
                     break;
                 case 404: // not found
-                    notepad.innerHTML = '<b>Resource Not Found</b>';
+                    notepad.innerHTML = 'Not found.';
                     break;
                 default: // any other status
-                    msg.innerHTML = `${obj.message}`;
+                    msg.innerHTML = `Error code not implemented by client`;
                     alert.style.display = "inline-block";
                     alert.style.backgroundColor = "#2196F3";
                     break;
                 }
 
+            // call parse json function to parse xhr responses
             parseJSON(xhr, notepad);
         };
+
+        // function to send post
         const sendPost = (e, noteForm) => {
             
+            // grab the action and method from the post form 
             const noteAction = noteForm.getAttribute('action');
             const noteMethod = noteForm.getAttribute('method');
 
+            // grab note field, title field, and color fields from the form
             const noteField = noteForm.querySelector('#noteField');
             const titleField = noteForm.querySelector('#titleField');
             const colorSelect = noteForm.querySelector('#color');
 
+            // create and open xhr
             const xhr = new XMLHttpRequest();
             xhr.open(noteMethod, noteAction);
 
+            // set the request headers for json
             xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
             xhr.setRequestHeader('Accept', 'application/json');
 
+            // when xhr is loaded, call handleResponse and pass xhr object
             xhr.onload = () => handleResponse(xhr);
 
+            // grab the form data
             const formData = `title=${titleField.value}&note=${noteField.value}&color=${colorSelect.value}`;
 
+            // send ajax request with form data to the server
             xhr.send(formData);
 
             e.preventDefault();
             return false;
         };
 
+        // function to send get request
         const requestUpdate = (e, getNotes) => {
 
+            // grab the action and method from the getNotes form
             const getNotesAction = getNotes.getAttribute('action');
             const getNotesMethod = getNotes.getAttribute('method');
 
+            // create new xhr
             const xhr = new XMLHttpRequest();
 
+            // open the xhr 
             xhr.open(getNotesMethod, getNotesAction);
 
+            // set the request headers
             xhr.setRequestHeader('Accept', 'application/json');
 
+            // if method is get
             if(getNotesMethod == 'get'){
+            // when xhr loads, call handleResponse and pass xhr object
             xhr.onload = () => handleResponse(xhr, true);
             } else {
                 xhr.onload = () => handleResponse(xhr, false);
             }
 
+            // send ajax request to the server
             xhr.send();
 
             e.preventDefault();
@@ -146,16 +177,20 @@
             return false;
         };
 
+        // on window load init
         const init = () => {
             
+            // grab the note and get forms
             const noteForm = document.querySelector('#noteForm');
             const getForm = document.querySelector('#get_notes_form');
 
+            // call the getNotes and addNote functions
             const getNotes = (e) => requestUpdate(e, getForm);
             const addNote = (e) => sendPost(e, noteForm);
             
+            // add a listener to the buttons for both forms 
             noteForm.addEventListener('submit', addNote);
-            getForm.addEventListener('click', getNotes);
+            getForm.addEventListener('submit', getNotes);
         };
 
         window.onload = init;
@@ -163,7 +198,7 @@
 </head>
 <body>
     <div id="title">
-    <h1>Notes</h1>
+    <h1>Make-a-note</h1>
     </div>
     <div id="head">
         <form id="noteForm" action="/addNote" method="post">

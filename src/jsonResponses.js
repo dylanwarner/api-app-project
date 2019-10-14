@@ -33,13 +33,16 @@ const addNote = (request, response, body) => {
     message: 'Title and note are both required.',
   };
 
+  // if the note or title or color are missing, missing params response
   if (!body.note || !body.title || !body.color) {
     responseJSON.id = 'missingParams';
     return respondJSON(request, response, 400, responseJSON);
   }
 
+  // create 201 response code
   let responseCode = 201;
 
+  // if the title is in the post, update the content
   if (notes[body.title]) {
     responseCode = 204;
   } else {
@@ -51,6 +54,7 @@ const addNote = (request, response, body) => {
   notes[body.title].color = body.color;
 
 
+  // if response code is 201, send created response
   if (responseCode === 201) {
     responseJSON.message = 'Note added.';
     return respondJSON(request, response, responseCode, responseJSON);
